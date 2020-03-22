@@ -1,5 +1,6 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
+const fs = require('fs')
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
@@ -14,7 +15,18 @@ const createWindow = () => {
   });
 
   // and load the index.html of the app.
-  mainWindow.loadFile(path.join(__dirname, 'index.html'));
+  // mainWindow.loadFile(path.join(__dirname, 'index.html'));
+  mainWindow.loadURL("https://rpvoid.com/login");
+
+  mainWindow.webContents.on('did-finish-load', function() {
+
+    fs.readFile(__dirname+ '/index.min.css', "utf-8", function(error, data) {
+      if(!error){
+        var formatedData = data.replace(/\s{2,10}/g, ' ').trim()
+        mainWindow.webContents.insertCSS(formatedData)
+      }
+    })
+  })
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools();

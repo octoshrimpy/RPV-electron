@@ -18,3 +18,41 @@ position: fixed;
   margin: 0;
   border: none;
 }
+
+.plain-wrapper {
+  display: flex;
+  background: tomato;
+
+  .row {
+    // first row
+    &:nth-child(1) {
+      // news
+      .content-square.is-video {
+        display: none;
+      }
+
+      //login
+      form {
+        filter: none;
+
+        .is-footer {
+          bottom: 1rem;
+
+          .is-footer-link {
+            padding: 0.5rem;
+          }
+        }
+      }
+    }
+    // news and stuff
+    &:nth-child(2) {
+      flex-direction: column;
+      img {
+        display: none;
+      }
+      .content-square.is-bottom {
+        height: 3rem;
+      }
+    }
+  }
+}
