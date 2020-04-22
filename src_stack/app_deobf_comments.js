@@ -11538,12 +11538,12 @@
             }));
             var h = {};
 
-            function u(t, e) { // color parser
-                if (!(this instanceof u)) return new u(t, e);
+            function colorHelperFuncs(t, e) { // color parser
+                if (!(this instanceof colorHelperFuncs)) return new colorHelperFuncs(t, e);
                 if (e && e in o && (e = null), e && !(e in r)) throw new Error("Unknown model: " + e);
                 var i, l;
                 if (null == t) this.model = "rgb", this.color = [0, 0, 0], this.valpha = 1;
-                else if (t instanceof u) this.model = t.model, this.color = t.color.slice(), this.valpha = t.valpha;
+                else if (t instanceof colorHelperFuncs) this.model = t.model, this.color = t.color.slice(), this.valpha = t.valpha;
                 else if ("string" == typeof t) {
                     var c = n.get(t);
                     if (null === c) throw new Error("Unable to parse color from string: " + t);
@@ -11573,7 +11573,7 @@
                 this.valpha = Math.max(0, Math.min(1, this.valpha)), Object.freeze && Object.freeze(this)
             }
 
-            function l(t, e, i) {
+            function colorConverter(t, e, i) {
                 return (t = Array.isArray(t) ? t : [t]).forEach((function (t) {
                         (h[t] || (h[t] = []))[e] = i
                     })), t = t[0],
@@ -11597,7 +11597,7 @@
                 for (var i = 0; i < e; i++) "number" != typeof t[i] && (t[i] = 0);
                 return t
             }
-            u.prototype = {
+            colorHelperFuncs.prototype = {
                 toString: function () {
                     return this.string()
                 },
@@ -11630,7 +11630,7 @@
                     return t.r /= 255, t.g /= 255, t.b /= 255, 1 !== this.valpha && (t.alpha = this.valpha), t
                 },
                 round: function (t) {
-                    return t = Math.max(t || 0, 0), new u(this.color.map(function (t) {
+                    return t = Math.max(t || 0, 0), new colorHelperFuncs(this.color.map(function (t) {
                         return function (e) {
                             return function (t, e) {
                                 return Number(t.toFixed(e))
@@ -11639,37 +11639,37 @@
                     }(t)).concat(this.valpha), this.model)
                 },
                 alpha: function (t) {
-                    return arguments.length ? new u(this.color.concat(Math.max(0, Math.min(1, t))), this.model) : this.valpha
+                    return arguments.length ? new colorHelperFuncs(this.color.concat(Math.max(0, Math.min(1, t))), this.model) : this.valpha
                 },
-                red: l("rgb", 0, c(255)), //color declarations
-                green: l("rgb", 1, c(255)),
-                blue: l("rgb", 2, c(255)),
-                hue: l(["hsl", "hsv", "hsl", "hwb", "hcg"], 0, (function (t) {
+                red: colorConverter("rgb", 0, c(255)), //color declarations
+                green: colorConverter("rgb", 1, c(255)),
+                blue: colorConverter("rgb", 2, c(255)),
+                hue: colorConverter(["hsl", "hsv", "hsl", "hwb", "hcg"], 0, (function (t) {
                     return (t % 360 + 360) % 360
                 })),
-                saturationl: l("hsl", 1, c(100)),
-                lightness: l("hsl", 2, c(100)),
-                saturationv: l("hsv", 1, c(100)),
-                value: l("hsv", 2, c(100)),
-                chroma: l("hcg", 1, c(100)),
-                gray: l("hcg", 2, c(100)),
-                white: l("hwb", 1, c(100)),
-                wblack: l("hwb", 2, c(100)),
-                cyan: l("cmyk", 0, c(100)),
-                magenta: l("cmyk", 1, c(100)),
-                yellow: l("cmyk", 2, c(100)),
-                black: l("cmyk", 3, c(100)),
-                x: l("xyz", 0, c(100)),
-                y: l("xyz", 1, c(100)),
-                z: l("xyz", 2, c(100)),
-                l: l("lab", 0, c(100)),
-                a: l("lab", 1),
-                b: l("lab", 2),
+                saturationl: colorConverter("hsl", 1, c(100)),
+                lightness: colorConverter("hsl", 2, c(100)),
+                saturationv: colorConverter("hsv", 1, c(100)),
+                value: colorConverter("hsv", 2, c(100)),
+                chroma: colorConverter("hcg", 1, c(100)),
+                gray: colorConverter("hcg", 2, c(100)),
+                white: colorConverter("hwb", 1, c(100)),
+                wblack: colorConverter("hwb", 2, c(100)),
+                cyan: colorConverter("cmyk", 0, c(100)),
+                magenta: colorConverter("cmyk", 1, c(100)),
+                yellow: colorConverter("cmyk", 2, c(100)),
+                black: colorConverter("cmyk", 3, c(100)),
+                x: colorConverter("xyz", 0, c(100)),
+                y: colorConverter("xyz", 1, c(100)),
+                z: colorConverter("xyz", 2, c(100)),
+                l: colorConverter("lab", 0, c(100)),
+                a: colorConverter("lab", 1),
+                b: colorConverter("lab", 2),
                 keyword: function (t) {
-                    return arguments.length ? new u(t) : r[this.model].keyword(this.color)
+                    return arguments.length ? new colorHelperFuncs(t) : r[this.model].keyword(this.color)
                 },
                 hex: function (t) {
-                    return arguments.length ? new u(t) : n.to.hex(this.rgb().round().color)
+                    return arguments.length ? new colorHelperFuncs(t) : n.to.hex(this.rgb().round().color)
                 },
                 rgbNumber: function () {
                     var t = this.rgb().color;
@@ -11729,7 +11729,7 @@
                 grayscale: function () {
                     var t = this.rgb().color,
                         e = .3 * t[0] + .59 * t[1] + .11 * t[2];
-                    return u.rgb(e, e, e)
+                    return colorHelperFuncs.rgb(e, e, e)
                 },
                 fade: function (t) {
                     return this.alpha(this.valpha - this.valpha * t)
@@ -11751,21 +11751,21 @@
                         o = i.alpha() - n.alpha(),
                         a = ((s * o == -1 ? s : (s + o) / (1 + s * o)) + 1) / 2,
                         h = 1 - a;
-                    return u.rgb(a * i.red() + h * n.red(), a * i.green() + h * n.green(), a * i.blue() + h * n.blue(), i.alpha() * r + n.alpha() * (1 - r))
+                    return colorHelperFuncs.rgb(a * i.red() + h * n.red(), a * i.green() + h * n.green(), a * i.blue() + h * n.blue(), i.alpha() * r + n.alpha() * (1 - r))
                 }
             }, Object.keys(r).forEach((function (t) {
                 if (-1 === o.indexOf(t)) {
                     var e = r[t].channels;
-                    u.prototype[t] = function () {
-                        if (this.model === t) return new u(this);
-                        if (arguments.length) return new u(arguments, t);
+                    colorHelperFuncs.prototype[t] = function () {
+                        if (this.model === t) return new colorHelperFuncs(this);
+                        if (arguments.length) return new colorHelperFuncs(arguments, t);
                         var i = "number" == typeof arguments[e] ? e : this.valpha;
-                        return new u(d(r[this.model][t].raw(this.color)).concat(i), t)
-                    }, u[t] = function (i) {
-                        return "number" == typeof i && (i = p(s.call(arguments), e)), new u(i, t)
+                        return new colorHelperFuncs(d(r[this.model][t].raw(this.color)).concat(i), t)
+                    }, colorHelperFuncs[t] = function (i) {
+                        return "number" == typeof i && (i = p(s.call(arguments), e)), new colorHelperFuncs(i, t)
                     }
                 }
-            })), t.exports = u
+            })), t.exports = colorHelperFuncs
         },
         adrF: function (t, e, i) {
             (t.exports = i("I1BE")(!1)).push([t.i, ".is-spritesheet-preview[data-v-251429a5] {\n  background-position: 0 0;\n  background-size: auto;\n  background-color: transparent;\n}\n.is-modifier-stat[data-v-251429a5] {\n  padding: 0 !important;\n  margin: 0 !important;\n  position: relative;\n}\n.is-modifier-img[data-v-251429a5] {\n  width: 100%;\n  position: relative;\n}\n.is-modifier-text[data-v-251429a5] {\n  position: absolute;\n  top: 1.25vmin;\n  right: 1rem;\n  color: #FFFFFF;\n  font-weight: bold;\n  font-size: 2.75vmin;\n  mix-blend-mode: difference;\n}\n.is-health[data-v-251429a5], .is-stress[data-v-251429a5] {\n  right: 0.5rem;\n}\n.is-health.is-smaller[data-v-251429a5], .is-stress.is-smaller[data-v-251429a5] {\n  font-size: 2vmin;\n  top: 1.75vmin;\n}\n.is-health[data-v-251429a5]:after {\n  color: #FBEE00;\n  content: attr(data-content);\n}\n.is-stress[data-v-251429a5]:after {\n  color: #5dfa00;\n  content: attr(data-content);\n}\n.is-modifier-progress[data-v-251429a5] {\n  position: absolute;\n  height: 90%;\n  margin-left: 25%;\n}\n.tile.is-vertical > .tile.is-child.is-modifier-stat[data-v-251429a5]:not(:last-child) {\n  padding: 0 !important;\n  margin: 0 !important;\n}", ""])
@@ -11829,9 +11829,10 @@
                         }
                     }], (i = null) && o(e.prototype, i), n && o(e, n), t
                 }(),
-                PIXI = i("IqKQ"), // this h is PIXI
-                u = i("HlzF"),
+                PIXI = i("IqKQ"), // this h is PIXI; this i might be global scope
+                u = i("HlzF"), // u looks like howl plugin
                 l = i.n(u);
+                global.PIXI = PIXI;
 
             function c(t, e) {
                 for (var i = 0; i < e.length; i++) {
@@ -11846,7 +11847,7 @@
                     }(this, t)
                 }
                 var e, i, n;
-                return e = t, n = [{
+                return e = t, n = [{ // file loader for music
                     key: "create",
                     value: function (t) {
                         var e = arguments.length > 1 && void 0 !== arguments[1] && arguments[1],
@@ -11860,12 +11861,12 @@
                         void 0 !== t.duration && null !== t.duration && (i.sprite = {
                             __default: [0, t.duration]
                         });
-                        var n = new l.a.Howl(i);
-                        return n.dbId = t.id, n.name = t.name, n.nickname = t.nickname || t.name, n.baseVolume = t.volume, n.fadeStopIDs = [], n.on("fade", (function (t) {
-                            null != n.fadeStopIDs.find((function (e) {
+                        var song = new l.a.Howl(i);
+                        return song.dbId = t.id, song.name = t.name, song.nickname = t.nickname || t.name, song.baseVolume = t.volume, song.fadeStopIDs = [], song.on("fade", (function (t) {
+                            null != song.fadeStopIDs.find((function (e) {
                                 return e == t
-                            })) && (n.stop(t), n.off("end"))
-                        })), n
+                            })) && (song.stop(t), song.off("end"))
+                        })), song
                     }
                 }], (i = null) && c(e.prototype, i), n && c(e, n), t
             }();
